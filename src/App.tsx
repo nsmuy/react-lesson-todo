@@ -1,24 +1,71 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useRef } from "react";
+import "./App.css";
+import { v4 as uuidv4 } from 'uuid';
+import { Button, ButtonGroup } from '@chakra-ui/react'
+import { Todo } from './TodoDescription'
+import TodoList from "./components/TodoList";
+
 
 function App() {
+  const [inputTodo, setInputTodo] = useState('');
+  const [inputDetail, setInputDetail] = useState('');
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+  const handleTodoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputTodo(e.target.value);
+    console.log(inputTodo);
+  }
+
+  const handleDetailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputDetail(e.target.value);
+    console.log(inputDetail);
+  }
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const newTodo: Todo = {
+      id: uuidv4(),
+      name: inputTodo,
+      status: "untouched",
+      detail: inputDetail
+    }
+
+    setTodos((prevTodos) => {
+      return [...prevTodos, newTodo]
+    });
+
+    setInputTodo('');
+    setInputDetail('');
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <h1 className="appTitle">My Task</h1>
+
+    <div className="inputTodoArea">
+      <form onSubmit={(e) => handleSubmit(e)}>
+        <label>
+          TASK
+          <input
+            type="text"
+            value={inputTodo}
+            onChange={(e) => handleTodoChange(e)}
+          />
+        </label>
+
+        <label>
+          MEMO
+          <input
+            type="text"
+            value={inputDetail}
+            onChange={(e) => handleDetailChange(e)}
+          />
+        </label>
+        <Button colorScheme='orange' type="submit">Add</Button>
+      </form>
+    </div>
+      <TodoList todos={todos} />
     </div>
   );
 }
