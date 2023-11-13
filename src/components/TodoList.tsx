@@ -1,7 +1,7 @@
 import React from "react";
 import "../App.css";
 import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer } from "@chakra-ui/react";
-import { Todo } from "../TodoDescription";
+import { Todo } from "../../types/todoType";
 
 interface TodoListProps {
   todos: Todo[];
@@ -24,7 +24,7 @@ const TodoList: React.FC<TodoListProps> = ({ todos }) => {
             <Tbody>
               {todos.map((todo) => (
                 <Tr key={todo.id}>
-                  <Td>{todo.name}</Td>
+                  <Td>{todo.title}</Td>
                   <Td>{todo.status}</Td>
                   <Td>{todo.detail}</Td>
                 </Tr>
