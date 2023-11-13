@@ -1,5 +1,4 @@
 import React from 'react'
-// import { Todo } from "../../types/todoType";
 import { Button, ButtonGroup } from '@chakra-ui/react'
 
 
