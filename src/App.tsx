@@ -39,7 +39,15 @@ function App() {
 
   const handleDeleteTodo = (id: string) => {
     const newTodos = todos.filter((todo) => todo.id !== id);
-    setTodos(newTodos)
+    setTodos(newTodos);
+  }
+
+  const handleEditTodo = (id: Todo['id'], title: Todo['title'], detail: Todo['detail']) => {
+    const newTodos: Todo[] = todos.map(todo => 
+      todo.id === id ? {...todo, title: title, detail: detail } :
+      todo
+    );
+    setTodos(newTodos);
   }
 
   const handleTodoStatusChange = (id: string, newStatus: string) => {
@@ -63,8 +71,9 @@ function App() {
 
       <TodoList
         todos={todos}
-        handleDeleteTodo={handleDeleteTodo}
         handleTodoStatusChange={handleTodoStatusChange}
+        handleDeleteTodo={handleDeleteTodo}
+        handleEditTodo={handleEditTodo}
       />
     </div>
   );

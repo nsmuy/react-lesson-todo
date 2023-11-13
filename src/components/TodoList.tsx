@@ -4,17 +4,21 @@ import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer } 
 import { Todo } from "../../types/todoType";
 import DeleteTodo from "./DeleteTodo";
 import ChangeTodoStatus from "./ChangeTodoStatus";
+import EditTodo from "./EditTodo";
+
 
 interface TodoListProps {
   todos: Todo[];
-  handleDeleteTodo: (id: string) => void;
   handleTodoStatusChange: (id: string, newStatus: string) => void;
+  handleDeleteTodo: (id: string) => void;
+  handleEditTodo: (id: Todo['id'], title: Todo['title'], detail: Todo['detail']) => void;
 }
 
 const TodoList: React.FC<TodoListProps> = ({
   todos,
-  handleDeleteTodo,
   handleTodoStatusChange,
+  handleDeleteTodo,
+  handleEditTodo,
 }) => {
   return (
     <>
@@ -27,6 +31,7 @@ const TodoList: React.FC<TodoListProps> = ({
                 <Th>Task</Th>
                 <Th>Status</Th>
                 <Th>Detail</Th>
+                <Th></Th>
                 <Th></Th>
               </Tr>
             </Thead>
@@ -41,6 +46,12 @@ const TodoList: React.FC<TodoListProps> = ({
                     />
                   </Td>
                   <Td>{todo.detail}</Td>
+                  <Td>
+                    <EditTodo
+                      editTodo={todo}
+                      handleEditTodo={handleEditTodo}
+                    />
+                  </Td>
                   <Td>
                     <DeleteTodo
                       deleteId={todo.id}
