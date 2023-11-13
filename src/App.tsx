@@ -42,6 +42,13 @@ function App() {
     setTodos(newTodos)
   }
 
+  const handleTodoStatusChange = (id: string, newStatus: string) => {
+    const newTodos: Todo[] = todos.map(todo =>
+      todo.id === id ? { ...todo, status: newStatus as Todo['status'] } : todo
+    );
+    setTodos(newTodos);
+  };
+
   return (
     <div className="app">
       <h1 className="appTitle">My Task</h1>
@@ -57,6 +64,7 @@ function App() {
       <TodoList
         todos={todos}
         handleDeleteTodo={handleDeleteTodo}
+        handleTodoStatusChange={handleTodoStatusChange}
       />
     </div>
   );

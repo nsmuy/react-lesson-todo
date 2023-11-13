@@ -3,13 +3,19 @@ import "../App.css";
 import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer } from "@chakra-ui/react";
 import { Todo } from "../../types/todoType";
 import DeleteTodo from "./DeleteTodo";
+import ChangeTodoStatus from "./ChangeTodoStatus";
 
 interface TodoListProps {
   todos: Todo[];
   handleDeleteTodo: (id: string) => void;
+  handleTodoStatusChange: (id: string, newStatus: string) => void;
 }
 
-const TodoList: React.FC<TodoListProps> = ({ todos, handleDeleteTodo }) => {
+const TodoList: React.FC<TodoListProps> = ({
+  todos,
+  handleDeleteTodo,
+  handleTodoStatusChange,
+}) => {
   return (
     <>
       <div className="todoListArea">
@@ -28,7 +34,12 @@ const TodoList: React.FC<TodoListProps> = ({ todos, handleDeleteTodo }) => {
               {todos.map((todo) => (
                 <Tr key={todo.id}>
                   <Td>{todo.title}</Td>
-                  <Td>{todo.status}</Td>
+                  <Td>
+                    <ChangeTodoStatus
+                      todo={todo}
+                      handleTodoStatusChange={handleTodoStatusChange}
+                    />
+                  </Td>
                   <Td>{todo.detail}</Td>
                   <Td>
                     <DeleteTodo
