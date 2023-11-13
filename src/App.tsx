@@ -37,6 +37,11 @@ function App() {
     setInputDetail('');
   }
 
+  const handleDeleteTodo = (id: string) => {
+    const newTodos = todos.filter((todo) => todo.id !== id);
+    setTodos(newTodos)
+  }
+
   return (
     <div className="app">
       <h1 className="appTitle">My Task</h1>
@@ -49,7 +54,10 @@ function App() {
         handleSubmit={handleSubmit}
       />
 
-      <TodoList todos={todos} />
+      <TodoList
+        todos={todos}
+        handleDeleteTodo={handleDeleteTodo}
+      />
     </div>
   );
 }
