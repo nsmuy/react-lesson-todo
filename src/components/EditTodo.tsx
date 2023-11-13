@@ -23,12 +23,18 @@ const EditTodo: React.FC<EditTodoProps> = ({ editTodo, handleEditTodo }) => {
       <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Create your account</ModalHeader>
+          <ModalHeader>Edit Todo</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <Input value={title} onChange={(e) => setTitle(e.target.value)}
+            <label>
+              Todo Title
+              <Input value={title} onChange={(e) => setTitle(e.target.value)}
             />
-            <Input value={detail || ""} onChange={(e) => setDetail(e.target.value)} />
+            </label>
+            <label>
+              Todo Detail
+              <Input value={detail || ""} onChange={(e) => setDetail(e.target.value)} />
+            </label>
           </ModalBody>
 
           <ModalFooter>
