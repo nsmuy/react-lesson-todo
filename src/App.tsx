@@ -35,6 +35,7 @@ function App() {
   const [inputDeadline, setInputDeadline] = useState<string>('');
   const [isSorted, setIsSorted] = useState<boolean>(false);
   const [todos, setTodos] = useState<Todo[]>(dummy);
+  const [unsortedTodos, setUnsortedTodos] = useState<Todo[]>([]);
 
 
   // 最初にTodoを入力するときの関数
@@ -95,12 +96,18 @@ function App() {
 
 
   // Todoリストが昇順にソートされているか監視する関数
-  const handleTodoSortCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTodoSortButtonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
     setIsSorted(isChecked);
-  
+    console.log(isChecked)
+
     if (isChecked) {
+      const prevTodos = [...todos]; //ソート前のTodosを格納
+      setUnsortedTodos(prevTodos);
       handleTodoSortASC(todos);
+    } else {
+      const prevTodos = [...unsortedTodos];
+      setTodos(prevTodos);
     }
   }
 
@@ -134,7 +141,7 @@ function App() {
         handleTodoStatusChange={handleTodoStatusChange}
         handleDeleteTodo={handleDeleteTodo}
         handleEditTodo={handleEditTodo}
-        handleTodoSortCheckboxChange={handleTodoSortCheckboxChange}
+        handleTodoSortButtonChange={handleTodoSortButtonChange}
       />
     </div>
   );

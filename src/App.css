@@ -64,3 +64,11 @@ li {
 /* 完了のスタイル */
 .tr-completed .todoItemStatus {color: #427b28; background-color: #c6efce;}
 .tr-completed .todoItemStatus  select{background-color: #c6efce; font-weight: bold;}
+
+
+.todoSort {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}

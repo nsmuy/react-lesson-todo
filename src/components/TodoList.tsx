@@ -13,7 +13,7 @@ interface TodoListProps {
   handleTodoStatusChange: (id: string, newStatus: string) => void;
   handleDeleteTodo: (id: string) => void;
   handleEditTodo: (id: Todo['id'], title: Todo['title'], detail: Todo['detail'], deadline: Todo['deadline']) => void;
-  handleTodoSortCheckboxChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleTodoSortButtonChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const TodoList: React.FC<TodoListProps> = ({
@@ -22,17 +22,19 @@ const TodoList: React.FC<TodoListProps> = ({
   handleTodoStatusChange,
   handleDeleteTodo,
   handleEditTodo,
-  handleTodoSortCheckboxChange,
+  handleTodoSortButtonChange,
 }) => {
   return (
     <>
-      <label htmlFor="todoSort">締切が近い順に並べ替える</label>
-      <input 
-        id="todoSort"
-        type="checkbox"
-        checked={isSorted}
-        onChange={handleTodoSortCheckboxChange}
-      />
+      {/* 締切の昇順で並べ替えるチェックボックス */}
+      <label className="todoSort">
+        <span>締切が近い順に並べ替える</span>
+        <input 
+          type="checkbox"
+          checked={isSorted}
+          onChange={handleTodoSortButtonChange}
+        />
+      </label>
 
       <div className="todoListArea">
         <TableContainer>
