@@ -72,3 +72,14 @@ li {
   align-items: center;
   gap: 16px;
 }
+
+.filterStatus {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+
+.filterStatus input {
+  margin-left: 32px;
+}

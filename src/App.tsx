@@ -1,7 +1,7 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import { v4 as uuidv4 } from 'uuid';
-import { Todo } from '../types/todoType'
+import { Todo, FilterStatus } from '../types/todoType'
 import TodoList from "./components/TodoList";
 import InputTodo from "./components/InputTodo";
 
@@ -33,10 +33,15 @@ function App() {
   const [inputTodo, setInputTodo] = useState<string>('');
   const [inputDetail, setInputDetail] = useState<string>('');
   const [inputDeadline, setInputDeadline] = useState<string>('');
-  const [isSorted, setIsSorted] = useState<boolean>(false);
   const [todos, setTodos] = useState<Todo[]>(dummy);
+  const [isSorted, setIsSorted] = useState<boolean>(false);
   const [unsortedTodos, setUnsortedTodos] = useState<Todo[]>([]);
-
+  const [filterStatus, setFilterStatus] = useState<FilterStatus>({
+    all: true,
+    untouched: false,
+    processing: false,
+    completed: false
+  })
 
   // 最初にTodoを入力するときの関数
   const handleTodoTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,12 +99,10 @@ function App() {
     setTodos(newTodos);
   };
 
-
   // Todoリストが昇順にソートされているか監視する関数
   const handleTodoSortButtonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
     setIsSorted(isChecked);
-    console.log(isChecked)
 
     if (isChecked) {
       const prevTodos = [...todos]; //ソート前のTodosを格納
@@ -121,6 +124,52 @@ function App() {
     setTodos(sortedTodos);
   }
 
+  useEffect(() => {
+    handleFilterStatus(todos, filterStatus);
+  }, [filterStatus]);
+
+  //進行状態による絞り込み
+  const handleFilterStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {name, checked} = e.target;
+
+    setFilterStatus(prevStatus => {
+      const newStatus = { ...prevStatus };
+
+      switch (name) {
+        case 'all':
+          if (checked) {
+            newStatus.untouched = false;
+            newStatus.processing = false;
+            newStatus.completed = false;
+            newStatus.all = checked;
+          }
+          break;
+        case 'untouched':
+        case 'processing':
+        case 'completed':
+          if (checked) {
+            newStatus[name] = checked;
+          }
+          newStatus.all = false;
+          break;
+        default:
+          break;
+      }
+      return newStatus;
+    });
+  }
+
+  const handleFilterStatus = (todos: Todo[], filterStatus: FilterStatus) => {
+    setTodos(prevTodos => {
+      if (filterStatus.all) {
+        return prevTodos;
+      } 
+      return prevTodos.filter(todo => {
+        return (filterStatus[todo.status] ?? false);
+      });
+    });
+  }
+
   return (
     <div className="app">
       <h1 className="appTitle">My Task</h1>
@@ -138,10 +187,12 @@ function App() {
       <TodoList
         todos={todos}
         isSorted={isSorted}
+        filterStatus={filterStatus}
         handleTodoStatusChange={handleTodoStatusChange}
         handleDeleteTodo={handleDeleteTodo}
         handleEditTodo={handleEditTodo}
         handleTodoSortButtonChange={handleTodoSortButtonChange}
+        handleFilterStatusChange={handleFilterStatusChange}
       />
     </div>
   );

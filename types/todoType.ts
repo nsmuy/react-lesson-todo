@@ -5,3 +5,10 @@ export type Todo = {
   detail: string | null;
   deadline: string | null;
 };
+
+export type FilterStatus = {
+  all: boolean;
+  untouched: boolean;
+  processing: boolean;
+  completed: boolean;
+}
