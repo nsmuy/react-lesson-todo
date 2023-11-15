@@ -9,19 +9,31 @@ import EditTodo from "./EditTodo";
 
 interface TodoListProps {
   todos: Todo[];
+  isSorted: boolean;
   handleTodoStatusChange: (id: string, newStatus: string) => void;
   handleDeleteTodo: (id: string) => void;
   handleEditTodo: (id: Todo['id'], title: Todo['title'], detail: Todo['detail'], deadline: Todo['deadline']) => void;
+  handleTodoSortCheckboxChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const TodoList: React.FC<TodoListProps> = ({
   todos,
+  isSorted,
   handleTodoStatusChange,
   handleDeleteTodo,
   handleEditTodo,
+  handleTodoSortCheckboxChange,
 }) => {
   return (
     <>
+      <label htmlFor="todoSort">締切が近い順に並べ替える</label>
+      <input 
+        id="todoSort"
+        type="checkbox"
+        checked={isSorted}
+        onChange={handleTodoSortCheckboxChange}
+      />
+
       <div className="todoListArea">
         <TableContainer>
           <Table variant="simple">
