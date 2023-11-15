@@ -9,6 +9,7 @@ import InputTodo from "./components/InputTodo";
 function App() {
   const [inputTodo, setInputTodo] = useState<string>('');
   const [inputDetail, setInputDetail] = useState<string>('');
+  const [inputDeadline, setInputDeadline] = useState<string>('');
   const [todos, setTodos] = useState<Todo[]>([]);
 
   const handleTodoTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,6 +20,10 @@ function App() {
     setInputDetail(e.target.value);
   }
 
+  const handleTodoDeadlineChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputDeadline(e.target.value);
+  }
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -26,7 +31,8 @@ function App() {
       id: uuidv4(),
       title: inputTodo,
       status: "untouched",
-      detail: inputDetail
+      detail: inputDetail,
+      deadline: inputDeadline,
     }
 
     setTodos((prevTodos) => {
@@ -35,6 +41,7 @@ function App() {
 
     setInputTodo('');
     setInputDetail('');
+    setInputDeadline('');
   }
 
   const handleDeleteTodo = (id: string) => {
@@ -42,13 +49,20 @@ function App() {
     setTodos(newTodos);
   }
 
-  const handleEditTodo = (id: Todo['id'], title: Todo['title'], detail: Todo['detail']) => {
+  const handleEditTodo = (id: Todo['id'], title: Todo['title'], detail: Todo['detail'], deadline: Todo['deadline']) => {
     const newTodos: Todo[] = todos.map(todo => 
-      todo.id === id ? {...todo, title: title, detail: detail } :
+      todo.id === id ? {...todo, title: title, detail: detail, deadline: deadline } :
       todo
     );
     setTodos(newTodos);
   }
+
+  const handleTodoEditDeadline = (id: string, newDeadline: string) => {
+    const newTodos: Todo[] = todos.map(todo =>
+      todo.id === id ? { ...todo, deadline: newDeadline as Todo['deadline'] } : todo
+    );
+    setTodos(newTodos);
+  };
 
   const handleTodoStatusChange = (id: string, newStatus: string) => {
     const newTodos: Todo[] = todos.map(todo =>
@@ -64,8 +78,10 @@ function App() {
       <InputTodo
         inputTodo={inputTodo}
         inputDetail={inputDetail}
+        inputDeadline={inputDeadline}
         handleTodoTitleChange={handleTodoTitleChange}
         handleTodoDetailChange={handleTodoDetailChange}
+        handleTodoDeadlineChange={handleTodoDeadlineChange}
         handleSubmit={handleSubmit}
       />
 

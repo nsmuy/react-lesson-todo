@@ -11,7 +11,7 @@ interface TodoListProps {
   todos: Todo[];
   handleTodoStatusChange: (id: string, newStatus: string) => void;
   handleDeleteTodo: (id: string) => void;
-  handleEditTodo: (id: Todo['id'], title: Todo['title'], detail: Todo['detail']) => void;
+  handleEditTodo: (id: Todo['id'], title: Todo['title'], detail: Todo['detail'], deadline: Todo['deadline']) => void;
 }
 
 const TodoList: React.FC<TodoListProps> = ({
@@ -31,6 +31,7 @@ const TodoList: React.FC<TodoListProps> = ({
                 <Th>Task</Th>
                 <Th>Status</Th>
                 <Th>Detail</Th>
+                <Th>Deadline</Th>
                 <Th></Th>
                 <Th></Th>
               </Tr>
@@ -46,6 +47,7 @@ const TodoList: React.FC<TodoListProps> = ({
                     />
                   </Td>
                   <Td>{todo.detail}</Td>
+                  <Td>{todo.deadline}</Td>
                   <Td>
                     <EditTodo
                       editTodo={todo}

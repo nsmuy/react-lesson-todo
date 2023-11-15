@@ -1,21 +1,20 @@
 import React, { useState } from "react";
 import { Todo } from "../../types/todoType";
-
 import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input } from "@chakra-ui/react";
 
 type EditTodoProps = {
   editTodo: Todo;
-  handleEditTodo: (id: Todo['id'], title: Todo['title'], detail: Todo['detail']) => void;
+  handleEditTodo: (id: Todo['id'], title: Todo['title'], detail: Todo['detail'], deadline: Todo['deadline']) => void;
 };
 
 const EditTodo: React.FC<EditTodoProps> = ({ editTodo, handleEditTodo }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [title, setTitle] = useState<string>(editTodo.title);
   const [detail, setDetail] = useState<string | null>(editTodo.detail);
+  const [deadline, setDeadline] = useState<string | null>(editTodo.deadline);
 
   return (
     <div>
-      {/* モーダル */}
       <Button colorScheme="gray" onClick={onOpen}>
         Edit
       </Button>
@@ -35,6 +34,10 @@ const EditTodo: React.FC<EditTodoProps> = ({ editTodo, handleEditTodo }) => {
               Todo Detail
               <Input value={detail || ""} onChange={(e) => setDetail(e.target.value)} />
             </label>
+            <label>
+              Todo Deadline
+              <Input type='date' value={deadline || ""} onChange={(e) => setDeadline(e.target.value)} />
+            </label>
           </ModalBody>
 
           <ModalFooter>
@@ -42,7 +45,7 @@ const EditTodo: React.FC<EditTodoProps> = ({ editTodo, handleEditTodo }) => {
               colorScheme="blue"
               mr={3}
               onClick={() => {
-                handleEditTodo(editTodo.id, title, detail);
+                handleEditTodo(editTodo.id, title, detail, deadline);
                 onClose();
               }}>
               Save
