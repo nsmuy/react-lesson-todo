@@ -38,9 +38,9 @@ const TodoList: React.FC<TodoListProps> = ({
             </Thead>
             <Tbody>
               {todos.map((todo) => (
-                <Tr key={todo.id}>
+                <Tr key={todo.id} className={`tr-${todo.status}`}>
                   <Td>{todo.title}</Td>
-                  <Td>
+                  <Td className="todoItemStatus">
                     <ChangeTodoStatus
                       todo={todo}
                       handleTodoStatusChange={handleTodoStatusChange}
