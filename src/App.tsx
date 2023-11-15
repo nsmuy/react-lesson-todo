@@ -83,13 +83,6 @@ function App() {
     setTodos(newTodos);
   }
 
-  const handleTodoEditDeadline = (id: string, newDeadline: string) => {
-    const newTodos: Todo[] = todos.map(todo =>
-      todo.id === id ? { ...todo, deadline: newDeadline as Todo['deadline'] } : todo
-    );
-    setTodos(newTodos);
-  };
-
   const handleTodoStatusChange = (id: string, newStatus: string) => {
     const newTodos: Todo[] = todos.map(todo =>
       todo.id === id ? { ...todo, status: newStatus as Todo['status'] } : todo
