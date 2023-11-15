@@ -5,12 +5,38 @@ import { Todo } from '../types/todoType'
 import TodoList from "./components/TodoList";
 import InputTodo from "./components/InputTodo";
 
+const dummy: Todo[]= [
+  {
+    id: uuidv4(),
+    title: 'タスクA',
+    status: "untouched",
+    detail: 'AAAAAAA',
+    deadline: '2023-12-01'
+  },
+  {
+    id: uuidv4(),
+    title: 'タスクB',
+    status: 'processing',
+    detail: 'BBBBBBBBB',
+    deadline: '2024-01-03'
+  },
+  {
+    id: uuidv4(),
+    title: 'タスクC',
+    status: 'completed',
+    detail: 'CCCCCCC',
+    deadline: '2023-12-01'
+  },
+
+]
+
 
 function App() {
   const [inputTodo, setInputTodo] = useState<string>('');
   const [inputDetail, setInputDetail] = useState<string>('');
   const [inputDeadline, setInputDeadline] = useState<string>('');
-  const [todos, setTodos] = useState<Todo[]>([]);
+  // const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>(dummy);
 
   const handleTodoTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputTodo(e.target.value);

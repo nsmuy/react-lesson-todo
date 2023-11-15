@@ -62,4 +62,5 @@ li {
 .tr-processing .todoItemStatus {color: #a86926; background-color: #feeb9c;}
 .tr-processing .todoItemStatus select {background-color: #feeb9c; font-weight: bold;}
 /* 完了のスタイル */
-.tr-completed .todoItemStatus {color: #427b28; background-color: #c6efce; font-weight: bold;}
+.tr-completed .todoItemStatus {color: #427b28; background-color: #c6efce;}
+.tr-completed .todoItemStatus  select{background-color: #c6efce; font-weight: bold;}
