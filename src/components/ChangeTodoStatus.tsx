@@ -2,14 +2,14 @@ import React from "react";
 import { Todo } from "../../types/todoType";
 
 type ChangeTodoStatusProps = {
-  todo: Todo;
+  visibleTodo: Todo;
   handleTodoStatusChange: (id: string, newStatus: string) => void;
 };
 
-const ChangeTodoStatus: React.FC<ChangeTodoStatusProps> = ({ todo, handleTodoStatusChange }) => {
+const ChangeTodoStatus: React.FC<ChangeTodoStatusProps> = ({ visibleTodo, handleTodoStatusChange }) => {
   return (
     <div>
-      <select value={todo.status} onChange={(e) => handleTodoStatusChange(todo.id, e.target.value)}>
+      <select value={visibleTodo.status} onChange={(e) => handleTodoStatusChange(visibleTodo.id, e.target.value)}>
         <option value="untouched">Untouched</option>
         <option value="processing">processing</option>
         <option value="completed">Completed</option>

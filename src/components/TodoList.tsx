@@ -6,9 +6,8 @@ import DeleteTodo from "./DeleteTodo";
 import ChangeTodoStatus from "./ChangeTodoStatus";
 import EditTodo from "./EditTodo";
 
-
 interface TodoListProps {
-  todos: Todo[];
+  visibleTodos: Todo[];
   isSorted: boolean;
   filterStatus: FilterStatus;
   handleTodoStatusChange: (id: string, newStatus: string) => void;
@@ -19,7 +18,7 @@ interface TodoListProps {
 }
 
 const TodoList: React.FC<TodoListProps> = ({
-  todos,
+  visibleTodos,
   isSorted,
   filterStatus,
   handleTodoStatusChange,
@@ -83,26 +82,26 @@ const TodoList: React.FC<TodoListProps> = ({
               </Tr>
             </Thead>
             <Tbody>
-              {todos.map((todo) => (
-                <Tr key={todo.id} className={`tr-${todo.status}`}>
-                  <Td>{todo.title}</Td>
+              {visibleTodos.map((visibleTodo) => (
+                <Tr key={visibleTodo.id} className={`tr-${visibleTodo.status}`}>
+                  <Td>{visibleTodo.title}</Td>
                   <Td className="todoItemStatus">
                     <ChangeTodoStatus
-                      todo={todo}
+                      visibleTodo={visibleTodo}
                       handleTodoStatusChange={handleTodoStatusChange}
                     />
                   </Td>
-                  <Td>{todo.detail}</Td>
-                  <Td>{todo.deadline}</Td>
+                  <Td>{visibleTodo.detail}</Td>
+                  <Td>{visibleTodo.deadline}</Td>
                   <Td>
                     <EditTodo
-                      editTodo={todo}
+                      editTodo={visibleTodo}
                       handleEditTodo={handleEditTodo}
                     />
                   </Td>
                   <Td>
                     <DeleteTodo
-                      deleteId={todo.id}
+                      deleteId={visibleTodo.id}
                       handleDeleteTodo={handleDeleteTodo}
                     />
                   </Td>

@@ -25,7 +25,21 @@ const dummy: Todo[]= [
     title: 'タスクC',
     status: 'completed',
     detail: 'CCCCCCC',
-    deadline: '2023-12-01'
+    deadline: '2024-09-21'
+  },
+  {
+    id: uuidv4(),
+    title: 'タスクD',
+    status: 'untouched',
+    detail: 'DDDDDDD',
+    deadline: '2024-06-01'
+  },
+  {
+    id: uuidv4(),
+    title: 'タスクE',
+    status: 'processing',
+    detail: 'EEEEEEE',
+    deadline: '2024-01-01'
   },
 ]
 
@@ -34,16 +48,15 @@ function App() {
   const [inputDetail, setInputDetail] = useState<string>('');
   const [inputDeadline, setInputDeadline] = useState<string>('');
   const [todos, setTodos] = useState<Todo[]>(dummy);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
   const [isSorted, setIsSorted] = useState<boolean>(false);
-  const [unsortedTodos, setUnsortedTodos] = useState<Todo[]>([]);
   const [filterStatus, setFilterStatus] = useState<FilterStatus>({
     all: true,
     untouched: false,
     processing: false,
     completed: false
-  })
+  });
 
-  // 最初にTodoを入力するときの関数
   const handleTodoTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputTodo(e.target.value);
   }
@@ -56,6 +69,27 @@ function App() {
     setInputDeadline(e.target.value);
   }
 
+  // Todosが変化（追加・削除）した時
+  // ステータスとソートの値に応じて、visibleTodosを更新する
+  useEffect(() => {
+    const updateVisibleTodos = () => {
+      let newTodos = [...todos];
+
+      if (!filterStatus.all) {
+        newTodos = newTodos.filter(todo => filterStatus[todo.status] ?? false);
+      }
+
+      if (isSorted) {
+        newTodos = handleTodoSortASC(newTodos);
+      }
+
+      return newTodos;
+    };
+
+    setVisibleTodos(updateVisibleTodos());
+  }, [todos]);
+
+  //Todoを追加する関数
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -68,21 +102,20 @@ function App() {
     }
 
     setTodos((prevTodos) => {
-      return [...prevTodos, newTodo]
+      return [...prevTodos, newTodo];
     });
-
     setInputTodo('');
     setInputDetail('');
     setInputDeadline('');
   }
 
-  // Todo入力後にTodoを削除する関数
+  // Todoを削除する関数
   const handleDeleteTodo = (id: string) => {
     const newTodos = todos.filter((todo) => todo.id !== id);
     setTodos(newTodos);
   }
 
-  // Todo入力後に内容を変更する関数
+  // Todoの内容を変更する関数
   const handleEditTodo = (id: Todo['id'], title: Todo['title'], detail: Todo['detail'], deadline: Todo['deadline']) => {
     const newTodos: Todo[] = todos.map(todo => 
       todo.id === id ? {...todo, title: title, detail: detail, deadline: deadline } :
@@ -91,7 +124,7 @@ function App() {
     setTodos(newTodos);
   }
 
-  //Todoの進行状況（ステート）を変更する関数
+  //Todoのステータスを変更する関数
   const handleTodoStatusChange = (id: string, newStatus: string) => {
     const newTodos: Todo[] = todos.map(todo =>
       todo.id === id ? { ...todo, status: newStatus as Todo['status'] } : todo
@@ -99,75 +132,70 @@ function App() {
     setTodos(newTodos);
   };
 
-  // Todoリストが昇順にソートされているか監視する関数
+  // 昇順ソートボタンがクリックされたとき、呼び出される関数
   const handleTodoSortButtonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
     setIsSorted(isChecked);
 
+    const newVisibleTodos = [...visibleTodos];
     if (isChecked) {
-      const prevTodos = [...todos]; //ソート前のTodosを格納
-      setUnsortedTodos(prevTodos);
-      handleTodoSortASC(todos);
+      setVisibleTodos(handleTodoSortASC(newVisibleTodos));
     } else {
-      const prevTodos = [...unsortedTodos];
-      setTodos(prevTodos);
+      handleFilterStatus(filterStatus);
     }
   }
 
-  // Todoの締切を昇順ソートする関数
+  // deadlineの値を昇順にソートする関数
   const handleTodoSortASC = (todos: Todo[]) => {
     const sortedTodos = todos.sort((a: Todo, b: Todo) => {
       if (a.deadline === null) return 1;
       if (b.deadline === null) return -1;
       return a.deadline.localeCompare(b.deadline);
     });
-    setTodos(sortedTodos);
+    return sortedTodos;
   }
 
+  //filterStatusが変更されたらhandleFilterStatusを実行
   useEffect(() => {
-    handleFilterStatus(todos, filterStatus);
+    handleFilterStatus(filterStatus);
   }, [filterStatus]);
 
-  //進行状態による絞り込み
+  //ボタンの操作からfilterStatusを変更する関数
   const handleFilterStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {name, checked} = e.target;
-
+    const { name, checked } = e.target;
+  
     setFilterStatus(prevStatus => {
-      const newStatus = { ...prevStatus };
-
-      switch (name) {
-        case 'all':
-          if (checked) {
-            newStatus.untouched = false;
-            newStatus.processing = false;
-            newStatus.completed = false;
-            newStatus.all = checked;
-          }
-          break;
-        case 'untouched':
-        case 'processing':
-        case 'completed':
-          if (checked) {
-            newStatus[name] = checked;
-          }
-          newStatus.all = false;
-          break;
-        default:
-          break;
+      const newStatus = { ...prevStatus, [name]: checked };
+  
+      if (name === 'all') {
+        if (checked) {
+          // allがtrueのとき、他のすべてをfalseに設定
+          newStatus.untouched = false;
+          newStatus.processing = false;
+          newStatus.completed = false;
+        }
+      } else {
+        // all以外のステータスが更新されたとき
+        newStatus.all = false;
+        // all以外のすべてがfalseのとき、allをtrueにする
+        if(!newStatus.untouched && !newStatus.processing && !newStatus.completed) {
+          newStatus.all = true;
+        }
       }
+
       return newStatus;
     });
-  }
+  };
 
-  const handleFilterStatus = (todos: Todo[], filterStatus: FilterStatus) => {
-    setTodos(prevTodos => {
+  //変更されたステータスに応じて絞り込み、visibleTodosを更新する関数
+  const handleFilterStatus = (filterStatus: FilterStatus) => {
+    const newTodos = [...todos];
+
       if (filterStatus.all) {
-        return prevTodos;
-      } 
-      return prevTodos.filter(todo => {
-        return (filterStatus[todo.status] ?? false);
-      });
-    });
+        setVisibleTodos(newTodos);
+      } else {
+        setVisibleTodos(newTodos.filter(todo => filterStatus[todo.status] ?? false));
+      }
   }
 
   return (
@@ -185,7 +213,7 @@ function App() {
       />
 
       <TodoList
-        todos={todos}
+        visibleTodos={visibleTodos}
         isSorted={isSorted}
         filterStatus={filterStatus}
         handleTodoStatusChange={handleTodoStatusChange}
