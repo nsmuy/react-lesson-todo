@@ -5,6 +5,7 @@ import { Todo, FilterStatus } from "../../types/todoType";
 import DeleteTodo from "./DeleteTodo";
 import ChangeTodoStatus from "./ChangeTodoStatus";
 import EditTodo from "./EditTodo";
+import FilterStatusControls from "./FilterStatusControls";
 
 interface TodoListProps {
   visibleTodos: Todo[];
@@ -12,7 +13,12 @@ interface TodoListProps {
   filterStatus: FilterStatus;
   handleTodoStatusChange: (id: string, newStatus: string) => void;
   handleDeleteTodo: (id: string) => void;
-  handleEditTodo: (id: Todo['id'], title: Todo['title'], detail: Todo['detail'], deadline: Todo['deadline']) => void;
+  handleEditTodo: (
+    id: Todo['id'],
+    title: Todo['title'],
+    detail: Todo['detail'],
+    deadline: Todo['deadline']
+  ) => void;
   handleTodoSortButtonChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleFilterStatusChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -39,33 +45,10 @@ const TodoList: React.FC<TodoListProps> = ({
         />
       </label>
 
-      {/* 進行状態による絞り込み */}
-      <label className="filterStatus">
-        <input 
-          type="checkbox"
-          name="all"
-          checked={filterStatus.all}
-          onChange={handleFilterStatusChange}
-        />All
-        <input 
-          type="checkbox"
-          name="untouched"
-          checked={filterStatus.untouched}
-          onChange={handleFilterStatusChange}
-        />Untouched
-        <input 
-          type="checkbox"
-          name="processing"
-          checked={filterStatus.processing}
-          onChange={handleFilterStatusChange}
-        />Processing
-        <input 
-          type="checkbox"
-          name="completed"
-          checked={filterStatus.completed}
-          onChange={handleFilterStatusChange}
-        />Completed
-      </label>
+      <FilterStatusControls
+        filterStatus={filterStatus}
+        handleFilterStatusChange={handleFilterStatusChange}
+      />
 
       <div className="todoListArea">
         <TableContainer>
