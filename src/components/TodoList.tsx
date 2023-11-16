@@ -6,6 +6,7 @@ import DeleteTodo from "./DeleteTodo";
 import ChangeTodoStatus from "./ChangeTodoStatus";
 import EditTodo from "./EditTodo";
 import FilterStatusControls from "./FilterStatusControls";
+import SortControls from "./SortControls";
 
 interface TodoListProps {
   visibleTodos: Todo[];
@@ -35,15 +36,11 @@ const TodoList: React.FC<TodoListProps> = ({
 }) => {
   return (
     <>
-      {/* 締切の昇順で並べ替えるチェックボックス */}
-      <label className="todoSort">
-        <span>締切が近い順に並べ替える</span>
-        <input 
-          type="checkbox"
-          checked={isSorted}
-          onChange={handleTodoSortButtonChange}
-        />
-      </label>
+
+      <SortControls
+        isSorted={isSorted}
+        handleTodoSortButtonChange={handleTodoSortButtonChange}
+      />
 
       <FilterStatusControls
         filterStatus={filterStatus}
