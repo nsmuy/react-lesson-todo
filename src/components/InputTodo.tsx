@@ -28,6 +28,7 @@ const InputTodo: React.FC<InputTodoProps> = ({
           type="text"
           value={inputTodo}
           onChange={handleTodoTitleChange}
+          required
         />
       </label>
 
